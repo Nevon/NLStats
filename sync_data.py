@@ -88,11 +88,6 @@ def csvToDict(infile, delimiter=","):
 
 
 if __name__ == "__main__":
-    #Get the spreadsheet from the command line argument
-    parser = ArgumentParser("Download a .cvs file from Google Docs")
-    parser.add_argument("spreadsheet")
-    options = parser.parse_args()
-
     #Now get user credentials from the config file
     config = configparser.ConfigParser()
     config.read("credentials.ini")
@@ -105,7 +100,7 @@ if __name__ == "__main__":
     dbname = config.get('Database', 'DatabaseName')
     dbhost = config.get('Database', 'Host')
 
-    spreadsheet_id = options.spreadsheet # (spreadsheet id here)
+    spreadsheet_id = config.get('GoogleAccount', 'Spreadsheet') # (spreadsheet id here)
 
     print 'Authenticating...'
     # Create client and spreadsheet objects
@@ -130,15 +125,15 @@ if __name__ == "__main__":
         cursor = db.cursor()
 
         for index, value in enumerate(games):
-            print 'Run {} out of {}'.format(index, len(games))
+            print 'Run %i out of %i' % (index, len(games))
             try:
                 cursor.execute("INSERT INTO runs VALUES (%s, %s, %s, %s, %s, %s)", (index+1, value['ep'], value['character'], value['result'], value['killedon'], value['killedby']))
                 db.commit()
             except MySQLdb.IntegrityError:
-                print 'Run {} already present in database. Skipping.'.format((index+1))
+                print 'Run %i already present in database. Skipping.' % ((index+1),)
                 pass
 
         db.close()
         print 'Done!'
     except MySQLdb.Error, e:
-        print "Error {}: {}".format(e.args[0], e.args[1])
+        print "Error %s: %s" % (e.args[0], e.args[1])
