@@ -2,7 +2,6 @@
 # -*- coding: utf-8 -*- 
 
 import os, re, urllib, urllib2, getpass, csv, MySQLdb
-from argparse import ArgumentParser
 try:
     import configparser
 except:
