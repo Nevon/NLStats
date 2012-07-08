@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*- 
 
-import re, urllib, urllib2, getpass, csv, MySQLdb
+import os, re, urllib, urllib2, getpass, csv, MySQLdb
 from argparse import ArgumentParser
 try:
     import configparser
@@ -90,7 +90,7 @@ def csvToDict(infile, delimiter=","):
 if __name__ == "__main__":
     #Now get user credentials from the config file
     config = configparser.ConfigParser()
-    config.read("credentials.ini")
+    config.read(os.path.join(os.path.dirname(os.path.realpath(__file__)), "credentials.ini"))
 
     
     email = config.get('GoogleAccount', 'Email')
